@@ -1,1 +1,14 @@
-# qa_python
+test_add_new_book_two_entries_add_two_books - проверяет добавление двух книг
+test_add_new_book_zero_or_more_than_40_length_not_added - проверяет что не добавляются книги с некорректной длиной
+test_add_new_book_valid_entry_has_no_genre - проверяет что книга создается без жанра
+test_add_new_book_duplicate_books_one_book_added - проверяет что дубликат книги не добавляется
+test_set_book_genre_valid_data_genre_applied - проверяет добавление жанра к книге
+test_set_book_genre_invalid_book_not_applied - проверяет что нельзя задать жанр несуществующей книге
+test_set_book_genre_invalid_genre_not_applied - проверяет что нельзя задать несуществующий жанр книге
+test_get_books_with_specific_genre_valid_genre_returns_books_in_genre - проверяет вывод книг в жанре
+test_get_books_genre_no_input_returns_empty - проверяет вывод пустого словаря если не были добавлены книги
+test_get_books_genre_five_books_returns_dict_of_five - проверяет вывод заполненного словаря после добавления книг
+test_get_books_for_children_five_books_returns_no_spookies_or_detectives - проверяет вывод списка с книгами не входящими в жанр 'Детектив' или 'Ужасы'
+test_add_book_in_favorites_single_book_added_successfully - проверяет добавление книги в избранное
+test_delete_book_from_favorites_single_book_deleted_successfully - проверяет удаление книги из избранного
+test_get_list_of_favorites_books_single_book_returns_list_with_single_book - проверяет вывод списка избранного после добавления книги
