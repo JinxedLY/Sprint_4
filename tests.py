@@ -1,24 +1,67 @@
-from main import BooksCollector
+import pytest
+from test_data import test_books_data
+from test_data import expected_books_by_genre
 
-# класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
-# обязательно указывать префикс Test
 class TestBooksCollector:
+    def test_add_new_book_two_entries_add_two_books(self, collection):
+        collection.add_new_book('Книга 1')
+        collection.add_new_book('Книга 2')
+        assert len(collection.get_books_genre()) == 2
 
-    # пример теста:
-    # обязательно указывать префикс test_
-    # дальше идет название метода, который тестируем add_new_book_
-    # затем, что тестируем add_two_books - добавление двух книг
-    def test_add_new_book_add_two_books(self):
-        # создаем экземпляр (объект) класса BooksCollector
-        collector = BooksCollector()
+    @pytest.mark.parametrize('book', ['1' * 0, '1' * 41])
+    def test_add_new_book_zero_or_more_than_40_length_not_added(self, book, collection):
+        collection.add_new_book(book)
+        assert len(collection.get_books_genre()) == 0
 
-        # добавляем две книги
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+    def test_add_new_book_valid_entry_has_no_genre(self, collection, default_book):
+        book_value = default_book
+        collection.add_new_book(book_value)
+        assert collection.get_book_genre(book_value) == ''
 
-        # проверяем, что добавилось именно две
-        # словарь books_rating, который нам возвращает метод get_books_rating, имеет длину 2
-        assert len(collector.get_books_rating()) == 2
+    def test_add_new_book_duplicate_books_one_book_added(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.add_new_book(default_book)
+        assert len(collection.get_books_genre()) == 1
 
-    # напиши свои тесты ниже
-    # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
+    def test_set_book_genre_valid_data_genre_applied(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.set_book_genre(default_book, 'Фантастика')
+        assert collection.get_book_genre(default_book) == 'Фантастика'
+
+    def test_set_book_genre_invalid_book_not_applied(self, collection, default_book):
+        collection.set_book_genre(default_book, 'Фантастика')
+        assert collection.get_book_genre(default_book) is None
+
+    def test_set_book_genre_invalid_genre_not_applied(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.set_book_genre(default_book, 'Жанр')
+        assert collection.get_book_genre(default_book) == ''
+
+    def test_get_books_with_specific_genre_valid_genre_returns_books_in_genre(self, premade_collection_of_5_books):
+        for genre, books in expected_books_by_genre.items():
+            assert premade_collection_of_5_books.get_books_with_specific_genre(genre) == books
+
+    def test_get_books_genre_no_input_returns_empty(self, collection):
+        assert collection.get_books_genre() == {}
+
+    def test_get_books_genre_five_books_returns_dict_of_five(self, premade_collection_of_5_books):
+        assert premade_collection_of_5_books.get_books_genre() == test_books_data
+
+    def test_get_books_for_children_five_books_returns_no_spookies_or_detectives(self, premade_collection_of_5_books):
+        assert premade_collection_of_5_books.get_books_for_children() == ['Книга 1', 'Книга 4', 'Книга 5']
+
+    def test_add_book_in_favorites_single_book_added_successfully(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.add_book_in_favorites(default_book)
+        assert len(collection.get_list_of_favorites_books()) == 1
+
+    def test_delete_book_from_favorites_single_book_deleted_successfully(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.add_book_in_favorites(default_book)
+        collection.delete_book_from_favorites(default_book)
+        assert len(collection.get_list_of_favorites_books()) == 0
+
+    def test_get_list_of_favorites_books_single_book_returns_list_with_single_book(self, collection, default_book):
+        collection.add_new_book(default_book)
+        collection.add_book_in_favorites(default_book)
+        assert len(collection.get_list_of_favorites_books()) == 1
