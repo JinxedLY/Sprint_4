@@ -1,5 +1,5 @@
 import pytest
-
+from test_data import test_books_data
 
 class TestBooksCollector:
     def test_add_new_book_two_entries_add_two_books(self, collection):
@@ -43,13 +43,7 @@ class TestBooksCollector:
         assert collection.get_books_genre() == {}
 
     def test_get_books_genre_five_books_returns_dict_of_five(self, premade_collection_of_5_books):
-        assert premade_collection_of_5_books.get_books_genre() == {
-            'Книга 1': 'Фантастика',
-            'Книга 2': 'Ужасы',
-            'Книга 3': 'Детективы',
-            'Книга 4': 'Мультфильмы',
-            'Книга 5': 'Комедии'
-        }
+        assert premade_collection_of_5_books.get_books_genre() == test_books_data
 
     def test_get_books_for_children_five_books_returns_no_spookies_or_detectives(self, premade_collection_of_5_books):
         assert premade_collection_of_5_books.get_books_for_children() == ['Книга 1', 'Книга 4', 'Книга 5']
