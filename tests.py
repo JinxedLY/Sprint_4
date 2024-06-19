@@ -1,5 +1,6 @@
 import pytest
 from test_data import test_books_data
+from test_data import expected_books_by_genre
 
 class TestBooksCollector:
     def test_add_new_book_two_entries_add_two_books(self, collection):
@@ -37,7 +38,8 @@ class TestBooksCollector:
         assert collection.get_book_genre(default_book) == ''
 
     def test_get_books_with_specific_genre_valid_genre_returns_books_in_genre(self, premade_collection_of_5_books):
-        assert premade_collection_of_5_books.get_books_with_specific_genre('Фантастика') == ['Книга 1']
+        for genre, books in expected_books_by_genre.items():
+            assert premade_collection_of_5_books.get_books_with_specific_genre(genre) == books
 
     def test_get_books_genre_no_input_returns_empty(self, collection):
         assert collection.get_books_genre() == {}
